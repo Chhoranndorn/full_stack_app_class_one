@@ -5,7 +5,8 @@ import "package:get/get.dart";
 
 class ApiProvider {
   final dio = Dio(BaseOptions(
-      baseUrl: "http://192.168.162.82:8000/api",
+      baseUrl: "http://10.0.2.2:8000/api",
+      // baseUrl: "http://192.168.162.82:8000/api",
       contentType: "application/json",
       validateStatus: (status) {
         return status! < 500;
@@ -26,5 +27,66 @@ class ApiProvider {
       );
     }
     return null;
+  }
+
+  Future<bool> createPost(
+      {required String name,
+      required String age,
+      required String address,
+      required String image}) async {
+    try {
+      final response = await dio.post('/posts', data: {
+        "name": name,
+        "age": age,
+        "address": address,
+        "image": image,
+      });
+      if (response.statusCode == 201) {
+        //created success
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> updatePost(
+      {required String name,
+      required String age,
+      required String address,
+      required String image,
+      required int id}) async {
+    try {
+      final response = await dio.put('/posts/$id', data: {
+        "name": name,
+        "age": age,
+        "address": address,
+        "image": image,
+      });
+      if (response.statusCode == 200) {
+        //created success
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> deletePost({required int id}) async {
+    try {
+      final response = await dio.delete('/posts/$id');
+      if (response.statusCode == 200) {
+        //created success
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
   }
 }

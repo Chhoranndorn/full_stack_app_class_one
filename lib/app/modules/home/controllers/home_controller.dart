@@ -20,4 +20,16 @@ class HomeController extends GetxController {
     post.value = responsePost;
     isLoading(false);
   }
+
+  void deletePost({required int id}) async {
+    final isSuccess = await _provider.deletePost(id: id);
+    if (isSuccess) {
+      print("success");
+      // Get.back(result: true);
+      getPost();
+    } else {
+      print("false");
+      Get.snackbar("Error", "Failed to create post");
+    }
+  }
 }
